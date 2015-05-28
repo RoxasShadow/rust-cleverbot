@@ -7,7 +7,7 @@ license = "WTFPL"
 
 description = "A Rust interface for Cleverbot."
 repository  = "https://github.com/RoxasShadow/rust-cleverbot"
-keywords    = ["cleberbot", "api", "machine learning", 'AI']
+keywords    = ["cleberbot", "api", 'AI']
 
 [lib]
 name = "cleverbot"
