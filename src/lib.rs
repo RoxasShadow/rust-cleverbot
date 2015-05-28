@@ -13,19 +13,35 @@ use crypto::digest::Digest;
 
 pub type Params = HashMap<&'static str, String>;
 
-pub trait Cleverbot {}
+struct Cleverbot<'a> {
+  params: &'a mut Params
+}
 
-impl Cleverbot {
+impl<'a> Cleverbot<'a> {
+  pub fn new() -> Cleverbot<'a> {
+    let mut params = HashMap::new();
+    params.insert("start",      "y"    .to_string());
+    params.insert("icognoid",   "wsf"  .to_string());
+    params.insert("fno",        "0"    .to_string());
+    params.insert("sub",        "Say"  .to_string());
+    params.insert("islearning", "1"    .to_string());
+    params.insert("cleanslate", "false".to_string());
+
+    return Cleverbot {
+      params: &mut params
+    };
+  }
+
   pub fn request(params: &Params) -> String {
     let url = "http://www.cleverbot.com/webservicemin";
 
+    // TODO: Cache client and/or builder
     let mut client  = Client::new();
     let     uri     = Url::parse(url).ok().unwrap();
     let     body    = Self::to_query_string(&params);
     let mut builder = client.post(uri)
       .body(&*body)
-      .send()
-      .unwrap();
+      .send().unwrap();
 
     let mut response = String::new();
     builder.read_to_string(&mut response).unwrap();
@@ -47,21 +63,13 @@ impl Cleverbot {
     return h.result_str();
   }
 
-  fn params_for(thought: String) -> Params {
-    // TODO: Cache this (except `stimulus`, ofc)
-    let mut params = HashMap::new();
-    params.insert("start",      "y"    .to_string());
-    params.insert("icognoid",   "wsf"  .to_string());
-    params.insert("fno",        "0"    .to_string());
-    params.insert("sub",        "Say"  .to_string());
-    params.insert("islearning", "1"    .to_string());
-    params.insert("cleanslate", "false".to_string());
-    params.insert("stimulus",   thought);
+  fn ask_for(params: &mut Params, thought: String) {
+    params.remove("stimulus");
+    params.insert("stimulus", thought);
 
     let query_string = Self::to_query_string(&params);
+    params.remove("icognocheck");
     params.insert("icognocheck", Self::checksum(&query_string));
-
-    return params;
   }
 
   fn prepare_post(query_string: &mut Params) {
@@ -79,10 +87,11 @@ impl Cleverbot {
     }
   }
 
-  pub fn think(thought: String) -> String {
-    let mut params   = Self::params_for(thought);
-    let     response = Self::request(&params);
-    Self::prepare_post(&mut params);
+  pub fn think(&self, thought: String) -> String {
+    Self::ask_for(&mut self.params, thought);
+
+    let response = Self::request(&self.params);
+    Self::prepare_post(&mut self.params);
     // TODO: Backlog
 
     let slice : Vec<&str> = response.split("\r").collect();
