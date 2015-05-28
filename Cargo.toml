@@ -1,0 +1,19 @@
+[package]
+name = "rust-cleverbot"
+version = "0.0.1"
+
+authors = ["Roxas Shadow <webmaster@giovannicapuano.net>"]
+license = "WTFPL"
+
+description = "A Rust interface for Cleverbot."
+repository  = "https://github.com/RoxasShadow/rust-cleverbot"
+keywords    = ["cleberbot", "api", "machine learning", 'AI']
+
+[lib]
+name = "cleverbot"
+path = "src/lib.rs"
+
+[dependencies]
+hyper = "0.5"
+rust-crypto = "0.2"
+url = "*"
