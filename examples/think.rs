@@ -10,6 +10,6 @@ fn main() {
     panic!("think something");
   }
 
-  let reply = Cleverbot::think(args[1].clone());
+  let reply = Cleverbot::new().think(args[1].clone());
   println!("<Cleverbot> {}", reply);
 }
