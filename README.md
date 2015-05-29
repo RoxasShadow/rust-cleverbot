@@ -6,7 +6,10 @@ A Rust interface for Cleverbot.
 
 Example
 -------
-┌[giovanni@lifestream] [/dev/ttys000] [master] 
-└[~/Desktop/rust-cleverbot]> cargo run --example think "What do you think about life?"
-     Running `target/debug/examples/think What do you think about life?`
-<Cleverbot> Life its like a chocolate box.
+> ┌[giovanni@lifestream] [/dev/ttys000] [master]
+
+> └[~/Desktop/rust-cleverbot]> cargo run --example think "What do you think about life?"
+
+> Running `target/debug/examples/think What do you think about life?`
+
+> \<Cleverbot\> Life its like a chocolate box.
