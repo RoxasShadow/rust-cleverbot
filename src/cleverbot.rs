@@ -6,9 +6,9 @@ use hyper::{Client, Url};
 use ::Params;
 use ::Utils;
 
-pub struct Cleverbot<'a> {
+pub struct Cleverbot {
       params:  Params,
-  pub backlog: Vec<&'a Response>
+  pub backlog: Vec<Response>
 }
 
 #[derive(Clone, Debug)]
@@ -17,8 +17,8 @@ pub struct Response {
   pub answer:   String
 }
 
-impl<'a> Cleverbot<'a> {
-  pub fn new() -> Cleverbot<'a> {
+impl Cleverbot {
+  pub fn new() -> Cleverbot {
     let mut params = HashMap::new();
     params.insert("start",      "y"    .to_string());
     params.insert("icognoid",   "wsf"  .to_string());
@@ -78,13 +78,17 @@ impl<'a> Cleverbot<'a> {
   }
 
   pub fn think(&mut self, thought: String) -> Response {
-    self.ask_for(thought);
+    self.ask_for(thought.clone());
 
-    let request              = self.request();
-    let slice    : Vec<&str> = request.split("\r").collect();
-    let response             = self.get_response(&slice);
+    let request = self.request();
+    let slice   = request.split("\r").collect::<Vec<&str>>();
 
-    // self.backlog.push(&response);
+    if slice.len() <= 1 {
+      return self.think(thought);
+    }
+
+    let response = self.get_response(&slice);
+    self.backlog.push(response.clone());
 
     return response;
   }
