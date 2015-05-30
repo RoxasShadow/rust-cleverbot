@@ -10,3 +10,4 @@ pub mod cleverbot;
 
 pub use utils::Utils;
 pub use cleverbot::Cleverbot;
+pub use cleverbot::Response;

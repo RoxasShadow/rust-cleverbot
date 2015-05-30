@@ -6,12 +6,19 @@ use hyper::{Client, Url};
 use ::Params;
 use ::Utils;
 
-pub struct Cleverbot {
-  params: Params
+pub struct Cleverbot<'a> {
+      params:  Params,
+  pub backlog: Vec<&'a Response>
 }
 
-impl Cleverbot {
-  pub fn new() -> Cleverbot {
+#[derive(Clone, Debug)]
+pub struct Response {
+  pub question: String,
+  pub answer:   String
+}
+
+impl<'a> Cleverbot<'a> {
+  pub fn new() -> Cleverbot<'a> {
     let mut params = HashMap::new();
     params.insert("start",      "y"    .to_string());
     params.insert("icognoid",   "wsf"  .to_string());
@@ -21,7 +28,8 @@ impl Cleverbot {
     params.insert("cleanslate", "false".to_string());
 
     return Cleverbot {
-      params: params
+      params:  params,
+      backlog: Vec::new()
     };
   }
 
@@ -49,30 +57,35 @@ impl Cleverbot {
     self.params.insert("icognocheck", Utils::checksum(&query_string));
   }
 
-  // fn prepare_post(query_string: &mut Params) {
-  //   let params = [
-  //     "sessionid", "logurl", "vText8", "vText7",
-  //     "vText6", "vText5", "vText4", "vText3",
-  //     "vText2", "prevref", "emotionalhistory", "ttsLocMP3",
-  //     "ttsLocTXT", "ttsLocTXT3", "ttsText", "lineRef",
-  //     "lineURL", "linePOST", "lineChoices", "lineChoicesAbbrev",
-  //     "typingData", "divert"
-  //   ];
+  fn get_response(&mut self, response: &Vec<&str>) -> Response {
+    let params = [
+      "sessionid",  "logurl",     "vText8",           "vText7",
+      "vText6",     "vText5",     "vText4",           "vText3",
+      "vText2",     "prevref",    "emotionalhistory", "ttsLocMP3",
+      "ttsLocTXT",  "ttsLocTXT3", "ttsText",          "lineRef",
+      "lineURL",    "linePOST",   "lineChoices",      "lineChoicesAbbrev",
+      "typingData", "divert"
+    ];
 
-  //   for i in 1..23 {
-  //     query_string.insert(params[i - 1], i.to_string());
-  //   }
-  // }
+    for i in 1..23 {
+      self.params.insert(params[i - 1], response[i].to_string());
+    }
 
-  pub fn think(&mut self, thought: String) -> String {
+    return Response {
+      question: response[8].to_string(),
+      answer:   response[16].to_string()
+    };
+  }
+
+  pub fn think(&mut self, thought: String) -> Response {
     self.ask_for(thought);
 
-    let response = self.request();
-    // Self::prepare_post(&mut params);
-    // TODO: Backlog
+    let request              = self.request();
+    let slice    : Vec<&str> = request.split("\r").collect();
+    let response             = self.get_response(&slice);
 
-    let slice : Vec<&str> = response.split("\r").collect();
-    let reply = if slice[0].is_empty() { slice[1] } else { slice[0] };
-    return reply.to_string();
+    // self.backlog.push(&response);
+
+    return response;
   }
 }
