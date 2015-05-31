@@ -14,13 +14,15 @@ fn main() {
 
     let mut reader   = io::stdin();
     let mut question = String::new();
-    reader.read_line(&mut question);
+    reader.read_line(&mut question).unwrap();
 
-    if question.trim() == "!backlog" {
-      println!("{:?}", cleverbot.backlog);
+    question = question.trim().to_string();
+
+    if question == "!backlog" {
+      println!("{:?}", cleverbot.backlog)
     }
     else {
-      let reply = cleverbot.think(question.trim().to_string());
+      let reply = cleverbot.think(question);
       println!("<Cleverbot> {}", reply.answer);
     }
   }

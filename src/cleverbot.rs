@@ -36,7 +36,6 @@ impl Cleverbot {
   pub fn request(&mut self) -> String {
     let url = "http://www.cleverbot.com/webservicemin";
 
-    // TODO: Cache client and/or builder
     let mut client  = Client::new();
     let     uri     = Url::parse(url).ok().unwrap();
     let     body    = Utils::to_query_string(&mut self.params);
