@@ -6,10 +6,22 @@ A Rust interface for Cleverbot.
 
 Example
 -------
-> ┌[giovanni@lifestream] [/dev/ttys000] [master]
+>>> \<You\> Do you believe in God?
 
-> └[~/Desktop/rust-cleverbot]> cargo run --example think "What do you think about life?"
+\<Cleverbot\> Yes, I figure it's better to believe there is one and to find out there isn't than to not believe and find out there is one.
 
-> Running `target/debug/examples/think What do you think about life?`
+\<You\> deeeeep
 
-> \<Cleverbot\> Life its like a chocolate box.
+\<Cleverbot\> Are you a christian?
+
+\<You\> nope
+
+\<Cleverbot\> How can you be sure?
+
+\<You\> uhm
+
+\<Cleverbot\> Uhm what?
+
+\<You\> .///.
+
+\<Cleverbot\> You make no sense.
