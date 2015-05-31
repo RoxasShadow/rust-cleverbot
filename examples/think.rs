@@ -3,20 +3,25 @@ extern crate cleverbot;
 use cleverbot::Cleverbot;
 
 use std::io;
+use std::io::prelude::*;
 
 fn main() {
-  print!("<You> ");
-  /*let mut reader = io::stdin();
-  let mut question = String::new();
-  reader.read_line(&mut question); */
-
   let mut cleverbot = Cleverbot::new();
-  let mut reply;
 
-  while {
-    reply = cleverbot.think("Hi".to_string());
-    reply.answer.is_empty()
-  } {}
+  loop {
+    print!("<You> ");
+    io::stdout().flush().ok().expect("Could not flush stdout");
 
-  println!("<Cleverbot> {}", reply.answer);
+    let mut reader   = io::stdin();
+    let mut question = String::new();
+    reader.read_line(&mut question);
+
+    if question.trim() == "!backlog" {
+      println!("{:?}", cleverbot.backlog);
+    }
+    else {
+      let reply = cleverbot.think(question.trim().to_string());
+      println!("<Cleverbot> {}", reply.answer);
+    }
+  }
 }
