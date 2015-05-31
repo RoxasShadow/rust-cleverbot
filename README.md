@@ -6,22 +6,22 @@ A Rust interface for Cleverbot.
 
 Example
 -------
->>> \<You\> Do you believe in God?
+> \<You\> Do you believe in God?
 
-\<Cleverbot\> Yes, I figure it's better to believe there is one and to find out there isn't than to not believe and find out there is one.
+> \<Cleverbot\> Yes, I figure it's better to believe there is one and to find out there isn't than to not believe and find out there is one.
 
-\<You\> deeeeep
+> \<You\> deeeeep
 
-\<Cleverbot\> Are you a christian?
+> \<Cleverbot\> Are you a christian?
 
-\<You\> nope
+> \<You\> nope
 
-\<Cleverbot\> How can you be sure?
+> \<Cleverbot\> How can you be sure?
 
-\<You\> uhm
+> \<You\> uhm
 
-\<Cleverbot\> Uhm what?
+> \<Cleverbot\> Uhm what?
 
-\<You\> .///.
+> \<You\> .///.
 
-\<Cleverbot\> You make no sense.
+> \<Cleverbot\> You make no sense.
