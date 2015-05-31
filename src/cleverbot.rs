@@ -7,7 +7,14 @@ use ::Params;
 use ::Utils;
 
 pub struct Cleverbot {
-  params: Params
+      params:  Params,
+  pub backlog: Vec<Response>
+}
+
+#[derive(Clone, Debug)]
+pub struct Response {
+  pub question: String,
+  pub answer:   String
 }
 
 impl Cleverbot {
@@ -21,7 +28,8 @@ impl Cleverbot {
     params.insert("cleanslate", "false".to_string());
 
     return Cleverbot {
-      params: params
+      params:  params,
+      backlog: Vec::new()
     };
   }
 
@@ -49,30 +57,39 @@ impl Cleverbot {
     self.params.insert("icognocheck", Utils::checksum(&query_string));
   }
 
-  // fn prepare_post(query_string: &mut Params) {
-  //   let params = [
-  //     "sessionid", "logurl", "vText8", "vText7",
-  //     "vText6", "vText5", "vText4", "vText3",
-  //     "vText2", "prevref", "emotionalhistory", "ttsLocMP3",
-  //     "ttsLocTXT", "ttsLocTXT3", "ttsText", "lineRef",
-  //     "lineURL", "linePOST", "lineChoices", "lineChoicesAbbrev",
-  //     "typingData", "divert"
-  //   ];
+  fn get_response(&mut self, response: &Vec<&str>) -> Response {
+    let params = [
+      "sessionid",  "logurl",     "vText8",           "vText7",
+      "vText6",     "vText5",     "vText4",           "vText3",
+      "vText2",     "prevref",    "emotionalhistory", "ttsLocMP3",
+      "ttsLocTXT",  "ttsLocTXT3", "ttsText",          "lineRef",
+      "lineURL",    "linePOST",   "lineChoices",      "lineChoicesAbbrev",
+      "typingData", "divert"
+    ];
 
-  //   for i in 1..23 {
-  //     query_string.insert(params[i - 1], i.to_string());
-  //   }
-  // }
+    for i in 1..23 {
+      self.params.insert(params[i - 1], response[i].to_string());
+    }
 
-  pub fn think(&mut self, thought: String) -> String {
-    self.ask_for(thought);
+    return Response {
+      question: response[8].to_string(),
+      answer:   response[16].to_string()
+    };
+  }
 
-    let response = self.request();
-    // Self::prepare_post(&mut params);
-    // TODO: Backlog
+  pub fn think(&mut self, thought: String) -> Response {
+    self.ask_for(thought.clone());
 
-    let slice : Vec<&str> = response.split("\r").collect();
-    let reply = if slice[0].is_empty() { slice[1] } else { slice[0] };
-    return reply.to_string();
+    let request = self.request();
+    let slice   = request.split("\r").collect::<Vec<&str>>();
+
+    if slice.len() <= 1 {
+      return self.think(thought);
+    }
+
+    let response = self.get_response(&slice);
+    self.backlog.push(response.clone());
+
+    return response;
   }
 }
