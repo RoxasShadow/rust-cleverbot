@@ -7,8 +7,8 @@ use ::Params;
 use ::Utils;
 
 pub struct Cleverbot {
-      params:  Params,
-  pub backlog: Vec<Response>
+  pub backlog: Vec<Response>,
+      params:  Params
 }
 
 #[derive(Clone, Debug)]
@@ -23,7 +23,6 @@ impl Cleverbot {
     params.insert("start",      "y"    .to_string());
     params.insert("icognoid",   "wsf"  .to_string());
     params.insert("fno",        "0"    .to_string());
-    params.insert("sub",        "Say"  .to_string());
     params.insert("islearning", "1"    .to_string());
     params.insert("cleanslate", "false".to_string());
 
@@ -49,8 +48,9 @@ impl Cleverbot {
     return response;
   }
 
-  fn ask_for(&mut self, thought: String) {
+  fn add_thought(&mut self, thought: String) {
     self.params.insert("stimulus", thought);
+    self.params.insert("sub",      "Say".to_string());
 
     let query_string = Utils::to_query_string(&self.params);
     self.params.insert("icognocheck", Utils::checksum(&query_string));
@@ -76,14 +76,14 @@ impl Cleverbot {
     };
   }
 
-  pub fn think(&mut self, thought: String) -> Response {
-    self.ask_for(thought.clone());
+  pub fn think_about(&mut self, thought: String) -> Response {
+    self.add_thought(thought.clone());
 
     let request = self.request();
     let slice   = request.split("\r").collect::<Vec<&str>>();
 
     if slice.len() <= 1 {
-      return self.think(thought);
+      return self.think_about(thought);
     }
 
     let response = self.get_response(&slice);

@@ -22,7 +22,7 @@ fn main() {
       println!("{:?}", cleverbot.backlog)
     }
     else {
-      let reply = cleverbot.think(question);
+      let reply = cleverbot.think_about(question);
       println!("<Cleverbot> {}", reply.answer);
     }
   }
