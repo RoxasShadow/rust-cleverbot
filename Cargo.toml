@@ -1,13 +1,13 @@
 [package]
 name = "rust-cleverbot"
-version = "0.1.0"
+version = "0.1.1"
 
 authors = ["Roxas Shadow <webmaster@giovannicapuano.net>"]
 license = "WTFPL"
 
 description = "A Rust interface for Cleverbot."
 repository  = "https://github.com/RoxasShadow/rust-cleverbot"
-keywords    = ["cleberbot", "api", 'AI']
+keywords    = ["cleverbot", "api", "AI", "machine-learning"]
 
 [lib]
 name = "cleverbot"
