@@ -1,6 +1,6 @@
 [package]
 name = "rust-cleverbot"
-version = "0.0.2"
+version = "0.1.0"
 
 authors = ["Roxas Shadow <webmaster@giovannicapuano.net>"]
 license = "WTFPL"
