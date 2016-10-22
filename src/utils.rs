@@ -9,7 +9,7 @@ pub trait Utils {}
 
 impl Utils {
   pub fn to_query_string(params: &Params) -> String {
-    return form_urlencoded::serialize(params.into_iter())
+    return form_urlencoded::Serializer::new(String::new()).extend_pairs(params.into_iter()).finish();
   }
 
   pub fn checksum(query_string: &String) -> String {
